@@ -1,3 +1,25 @@
+from itertools import groupby
+
+data = [    [1, 'A', 'John', 'Doe'],
+    [2, 'B', 'Jane', 'Doe'],
+    [1, 'C', 'John', 'Doe'],
+    [2, 'D', 'Jane', 'Doe'],
+    [3, 'E', 'Jim', 'Smith']
+]
+
+result = []
+for key, group in groupby(data, key=lambda x: x[0]):
+    group_result = []
+    first_name = group[0][2]
+    last_name = group[0][3]
+    for item in group:
+        code = item[1]
+        group_result.append(f"code:{code}|firstname:{first_name}|last name:{last_name}")
+    result.append([key, '\n'.join(group_result)])
+
+print(result)
+
+
 # BPJSONJPATH
 BPJSONJPATH
 using Newtonsoft.Json;
