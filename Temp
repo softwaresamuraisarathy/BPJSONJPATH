@@ -1,0 +1,21 @@
+import unittest
+from unittest.mock import MagicMock, patch
+import boto3
+
+class TestPushToQueue(unittest.TestCase):
+
+    @patch('boto3.client')
+    def test_push_to_queue_exception(self, mock_boto3_client):
+        mock_sqs = MagicMock()
+        mock_boto3_client.return_value = mock_sqs
+        mock_sqs.send_message.side_effect = Exception("Test exception")
+
+        data_list = [1, 2, 3]
+        with self.assertRaises(Exception) as context:
+            push_to_queue(data_list)
+
+        self.assertTrue("Error pushing data to queue" in str(context.exception))
+        mock_sqs.send_message.assert_called_with(QueueUrl="https://sqs.us-west-2.amazonaws.com/012345678910/queue-name", MessageBody="1")
+
+if __name__ == '__main__':
+    unittest.main()
